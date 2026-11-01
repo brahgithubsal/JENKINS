@@ -78,9 +78,17 @@ pipeline {
         stage('6. Deploy — Staging') {
             steps {
                 echo '🚀 Déploiement du conteneur en Staging...'
-                // Nettoyage de l'éventuel conteneur précédent
+                // Nettoyage de l'éventuel conteneur précédent (par nom)
                 sh 'docker stop staging-health-app || true'
                 sh 'docker rm   staging-health-app || true'
+                // Libérer le port s'il est occupé par un autre conteneur
+                sh """
+                    CONTAINER_ON_PORT=\$(docker ps --filter publish=${APP_PORT} --format '{{.Names}}' | head -1)
+                    if [ -n "\$CONTAINER_ON_PORT" ]; then
+                        echo "Port ${APP_PORT} occupé par : \$CONTAINER_ON_PORT — suppression forcée..."
+                        docker rm -f "\$CONTAINER_ON_PORT" || true
+                    fi
+                """
                 // Lancement du nouveau conteneur
                 sh """docker run -d \
                     --name staging-health-app \
@@ -92,8 +100,8 @@ pipeline {
                 // Attendre que l'app soit prête
                 sh 'sleep 5'
                 echo '🏥 Vérification du Health Check...'
-                sh "curl -f http://localhost:${APP_PORT}/health || (docker logs staging-health-app && exit 1)"
-                sh "curl -s http://localhost:${APP_PORT}/api/info | python3 -m json.tool"
+                sh "curl -f http://host.docker.internal:${APP_PORT}/health || (docker logs staging-health-app && exit 1)"
+                sh "curl -s http://host.docker.internal:${APP_PORT}/api/info | python3 -m json.tool"
                 echo '✅ Application déployée et healthy en Staging !'
             }
         }
