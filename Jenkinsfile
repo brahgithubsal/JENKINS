@@ -30,7 +30,7 @@ pipeline {
         stage('2. Code Quality — Flake8') {
             steps {
                 echo '🔍 Analyse statique du code avec flake8...'
-                sh 'python3 -m pip install --quiet flake8'
+                sh 'python3 -m pip install --quiet --break-system-packages flake8'
                 sh 'python3 -m flake8 app.py --max-line-length=100 --ignore=E501,W503'
                 echo '✅ Analyse flake8 terminée — aucune erreur critique détectée.'
             }
@@ -40,8 +40,8 @@ pipeline {
         stage('3. Unit Tests — Pytest') {
             steps {
                 echo '🧪 Installation des dépendances de test...'
-                sh 'python3 -m pip install --quiet -r requirements.txt'
-                sh 'python3 -m pip install --quiet -r requirements-dev.txt'
+                sh 'python3 -m pip install --quiet --break-system-packages -r requirements.txt'
+                sh 'python3 -m pip install --quiet --break-system-packages -r requirements-dev.txt'
                 echo '🧪 Exécution de la suite de tests pytest...'
                 sh 'mkdir -p reports'
                 sh 'python3 -m pytest test_app.py -v --junitxml=reports/test-results.xml --tb=short'
