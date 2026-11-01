@@ -1,0 +1,37 @@
+# Exclure les fichiers Python compilés
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Exclure les environnements virtuels
+venv/
+.venv/
+env/
+
+# Exclure les fichiers de test et de configuration dev
+test_app.py
+requirements-dev.txt
+pytest.ini
+.flake8
+.coverage
+htmlcov/
+
+# Exclure les rapports de tests générés par Jenkins
+reports/
+
+# Exclure les fichiers Git
+.git/
+.gitignore
+
+# Exclure les fichiers IDE
+.vscode/
+.idea/
+*.swp
+
+# Exclure les fichiers Jenkins
+Jenkinsfile
+
+# Exclure la documentation
+*.md
+docs/

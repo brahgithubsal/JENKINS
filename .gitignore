@@ -1,0 +1,28 @@
+# .gitignore — DevOps Health Checker
+# Bootcamp INNOTWIST 2026 — Chapitre 4
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environnements virtuels
+venv/
+.venv/
+env/
+
+# Rapports de tests Jenkins
+reports/
+
+# Variables d'environnement locales
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
